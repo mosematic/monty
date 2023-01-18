@@ -1,13 +1,30 @@
 #include "monty.h"
 
 /**
- * pall - prints the stack
- * @stack: stack given by main in start.c
- * @line_cnt: amount of lines
- *
- * Return: void
+ * pall - print all
+ * @stack: ponter to the list stack
+ * @line_number: unused variable
+ * Return: the address of the first node
  */
-void pall(stack_t **stack, unsigned int line_cnt __attribute__((unused)))
+stack_t *pall(stack_t **stack,
+	      unsigned int line_number __attribute__((unused)))
 {
-	print_stack(*stack);
+	stack_t *tmp;
+	size_t node_c = 0;
+
+	tmp = *stack;
+
+	if (*stack == NULL)
+	{
+		return (NULL);
+	}
+
+	while (tmp != NULL)
+	{
+		printf("%d\n", tmp->n);
+		tmp = tmp->next;
+		node_c++;
+	}
+
+	return (*stack);
 }
