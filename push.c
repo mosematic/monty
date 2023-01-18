@@ -1,36 +1,47 @@
 #include "monty.h"
 
 /**
- * push - adds a node with the value token on the stack
- * @stack: ponter to the list stack
- * @line_number: unused variable
- * Return: address of the new node
+ * push - pushes an element to the stack
+ * @stack: pointer to address of the stack
+ * @line_number: number to be assigned to stack element
  */
-stack_t *push(stack_t **stack,
-	      unsigned int line_number __attribute__((unused)))
+void push(stack_t **stack, unsigned int line_number)
 {
-	stack_t *new_node;
+	stack_t *new;
+	char *argument;
+	int status;
 
-	/* Create new node */
-	new_node = malloc(sizeof(stack_t));
-	if (new_node == NULL)
+	if (!stack)
+		return;
+	new = malloc(sizeof(stack_t));
+	if (!new)
 	{
 		fprintf(stderr, "Error: malloc failed\n");
-		free_stack(stack);
+		clear_stack(stack);
 		exit(EXIT_FAILURE);
 	}
-	/* Initialize the new node with the value of token */
-	new_node->n = token;
-	/* New node is placed at the beginning of the list */
-	new_node->prev = NULL;
-	new_node->next = *stack;
 
-	/* If new node is not alone, update the following one */
-	if (*stack != NULL)
-		(*stack)->prev = new_node;
+	argument = strtok(NULL, " ");
+	status = isnumber(argument);
+	if (status == -1)
+	{
+		fprintf(stderr, "L%u: usage: push integer\n", line_number);
+		exit(EXIT_FAILURE);
+	}
+	else
+	{
+		new->n = atoi(argument);
+	}
 
-	/* head points to the new node */
-	*stack = new_node;
-
-	return (new_node);
+	new->next = *stack;    /* element at the given line number */
+	new->prev = NULL;
+	if (*stack == NULL)
+	{
+		*stack = new;
+	}
+	else
+	{
+		(*stack)->prev = new;
+		*stack = new;
+	}
 }
