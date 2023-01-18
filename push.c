@@ -1,47 +1,38 @@
+#include <stdio.h>
+#include <ctype.h>
+#include <stdlib.h>
+#include <string.h>
 #include "monty.h"
 
 /**
- * push - pushes an element to the stack
- * @stack: pointer to address of the stack
- * @line_number: number to be assigned to stack element
+ * push - push element into the stack
+ * @stack: stack given by main
+ * @line_cnt: amount of lines
+ *
+ * Return: void
  */
-void push(stack_t **stack, unsigned int line_number)
+void push(stack_t **stack, unsigned int line_cnt)
 {
-	stack_t *new;
-	char *argument;
-	int status;
+	char *n = global.argument;
 
-	if (!stack)
-		return;
-	new = malloc(sizeof(stack_t));
-	if (!new)
+	if ((is_digit(n)) == 0)
 	{
-		fprintf(stderr, "Error: malloc failed\n");
-		clear_stack(stack);
+		fprintf(stderr, "L%d: usage: push integer\n", line_cnt);
 		exit(EXIT_FAILURE);
 	}
 
-	argument = strtok(NULL, " ");
-	status = isnumber(argument);
-	if (status == -1)
+	if (global.data_struct == 1)
 	{
-		fprintf(stderr, "L%u: usage: push integer\n", line_number);
-		exit(EXIT_FAILURE);
+		if (!add_node(stack, atoi(global.argument)))
+		{
+			exit(EXIT_FAILURE);
+		}
 	}
 	else
 	{
-		new->n = atoi(argument);
-	}
-
-	new->next = *stack;    /* element at the given line number */
-	new->prev = NULL;
-	if (*stack == NULL)
-	{
-		*stack = new;
-	}
-	else
-	{
-		(*stack)->prev = new;
-		*stack = new;
+		if (!queue_node(stack, atoi(global.argument)))
+		{
+			exit(EXIT_FAILURE);
+		}
 	}
 }
